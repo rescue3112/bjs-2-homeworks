@@ -1,24 +1,27 @@
 // Задание 1
-let sum = 0;
-let avg = 0;
-let min = arr[0];
-let max = arr[0];
-for (let i = 0; i < arr.length; i++) {
-    if (arr[i] < min) {
-        min = arr[i];
+
+function getArrayParams([...arr]) {
+
+    let sum = 0;
+    let avg = 0;
+    let min = arr[0];
+    let max = arr[0];
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] < min) {
+            min = arr[i];
+        }
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+        sum += arr[i];
     }
-    if (arr[i] > max) {
-        max = arr[i];
-    }
-    sum += arr[i];
-}
-avg = (sum / arr.length).toFixed(2);
-avg = Number(avg);
-return {
-    min: min,
-    max: max,
-    avg: avg
-};
+    avg = (sum / arr.length).toFixed(2);
+    avg = Number(avg);
+    return {
+        min: min,
+        max: max,
+        avg: avg
+    };
 }
 // Задание 2
 function worker([...arr]) {
