@@ -17,53 +17,47 @@ function cachingDecoratorNew(func) {
   }
   return wrapper;
 }
+//let ttt=func (...rest);
+//let timeout;
+//let timer = setTimeout(() => {
+  //func(...rest);
+  //flag = false;
+//}, timeout);
+
+
 function debounceDecoratorNew(func, timeout) {
-  let lastCallArgs;
-  let timer;
   let flag = false;
-  function wrapper(...rest) {
-    lastCallArgs = rest;
-    if (!flag) {
-      flag = true;
-      timer = setTimeout(() => {
-        func(...lastCallArgs);
-        flag = false;
-      }, timeout);
-      return func(...rest);
-    } else {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func(...lastCallArgs);
-        flag = false;
-      }, timeout);
-    }
+  let timeout2;
+  return function (...args) {
+    if (flag) {
+      return;       
+    }   
+    clearTimeout(timeout2);
+      func.apply(this, args);   
+       flag = true;
+    timeout2 = setTimeout(() => {
+        flag = false;         
+      func.apply(this, args);
+    }, timeout);
+    };
   }
-  return wrapper;
-}
-function debounceDecorator2(func, timeout) {
-  let lastCallArgs;
-  let timer;
-  let flag = false;
-  wrapper.count = 0;
-  function wrapper(...rest) {
-    lastCallArgs = rest;
-    if (!flag) {
-      flag = true;
-      timer = setTimeout(() => {
-      	console.log('Кол-во вызовов: ' + ++wrapper.count);
-        func(...lastCallArgs);
-        flag = false;
-      }, timeout);
-      console.log('Кол-во вызовов: ' + ++wrapper.count);
-      return func(...rest);
-    } else {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-      	console.log('Кол-во вызовов: ' + ++wrapper.count);
-        func(...lastCallArgs);
-        flag = false;
-      }, timeout);
-    }
+
+function debounceDecoratorNew2(func, timeout) {
+let flag = false;      
+let timeout2; 
+wrapper.count = 0;
+  return function wrapper(...args) {
+
+    if (isThrottled) {
+      return;       
+    }  
+     wrapper.count++;
+     clearTimeout(timeout2);
+      func.apply(this, args);   
+       flag = true;
+   timeout2 = setTimeout(() => {
+        flag = false;         
+      func.apply(this, args);
+    }, timeout);
+};
   }
-  return wrapper;
-}
