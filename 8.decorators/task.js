@@ -17,47 +17,50 @@ function cachingDecoratorNew(func) {
   }
   return wrapper;
 }
-//let ttt=func (...rest);
-//let timeout;
-//let timer = setTimeout(() => {
-  //func(...rest);
-  //flag = false;
-//}, timeout);
-
-
-function debounceDecoratorNew(func, timeout) {
+let timer;
+clearTimeout(timer);
   let flag = false;
-  let timeout2;
-  return function (...args) {
-    if (flag) {
-      return;       
-    }   
-    clearTimeout(timeout2);
-      func.apply(this, args);   
-       flag = true;
-    timeout2 = setTimeout(() => {
-        flag = false;         
-      func.apply(this, args);
-    }, timeout);
-    };
+function debounceDecoratorNew(func, timeout) {
+  function wrapper(...rest) {
+    
+    if (!flag) {
+      flag = true;
+      timer = setTimeout(() => {
+        func(...rest);
+        flag = false;
+      }, timeout);
+      return func(...rest);
+    } else {
+      
+      timer = setTimeout(() => {
+        func(...rest);
+        flag = false;
+      }, timeout);
+    }
   }
-
-function debounceDecoratorNew2(func, timeout) {
-let flag = false;      
-let timeout2; 
-wrapper.count = 0;
-  return function wrapper(...args) {
-
-    if (isThrottled) {
-      return;       
-    }  
-     wrapper.count++;
-     clearTimeout(timeout2);
-      func.apply(this, args);   
-       flag = true;
-   timeout2 = setTimeout(() => {
-        flag = false;         
-      func.apply(this, args);
-    }, timeout);
-};
+  return wrapper;
+}
+function debounceDecorator2(func, timeout) {
+  wrapper.count = 0;
+  function wrapper(...rest) {
+    
+    if (!flag) {
+      flag = true;
+      timer = setTimeout(() => {
+      	console.log('Кол-во вызовов: ' + ++wrapper.count);
+        func(...rest);
+        flag = false;
+      }, timeout);
+      console.log('Кол-во вызовов: ' + ++wrapper.count);
+      return func(...rest);
+    } else {
+      
+      timer = setTimeout(() => {
+      	console.log('Кол-во вызовов: ' + ++wrapper.count);
+        func(...rest);
+        flag = false;
+      }, timeout);
+    }
   }
+  return wrapper;
+}
